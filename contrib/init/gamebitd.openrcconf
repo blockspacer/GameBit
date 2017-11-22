@@ -1,0 +1,33 @@
+# /etc/conf.d/GameBitd: config file for /etc/init.d/GameBitd
+
+# Config file location
+#GameBitD_CONFIGFILE="/etc/GameBit/GameBit.conf"
+
+# What directory to write pidfile to?  (created and owned by $GameBitD_USER)
+#GameBitD_PIDDIR="/var/run/GameBitd"
+
+# What filename to give the pidfile
+#GameBitD_PIDFILE="${GameBitD_PIDDIR}/GameBitd.pid"
+
+# Where to write GameBitd data (be mindful that the blockchain is large)
+#GameBitD_DATADIR="/var/lib/GameBitd"
+
+# User and group to own GameBitd process
+#GameBitD_USER="GameBit"
+#GameBitD_GROUP="GameBit"
+
+# Path to GameBitd executable
+#GameBitD_BIN="/usr/bin/GameBitd"
+
+# Nice value to run GameBitd under
+#GameBitD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+GameBitD_OPTS="-disablewallet"
+
+# The timeout in seconds OpenRC will wait for GameBitd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+GameBitD_SIGTERM_TIMEOUT=60

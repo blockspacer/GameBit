@@ -1,0 +1,8 @@
+/usr/bin/GameBit-cli		--	gen_context(system_u:object_r:GameBit_exec_t,s0)
+/usr/sbin/GameBitd		--	gen_context(system_u:object_r:GameBit_exec_t,s0)
+/usr/lib(64)?/GameBit/GameBitd		--	gen_context(system_u:object_r:GameBit_exec_t,s0)
+
+/etc/GameBit(/.*)?		gen_context(system_u:object_r:GameBit_conf_t,s0)
+/var/lib/GameBit(/.*)?		gen_context(system_u:object_r:GameBit_var_lib_t,s0)
+
+(/var)?/run/GameBitd(/.*)?   gen_context(system_u:object_r:GameBit_var_run_t,s0)

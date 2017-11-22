@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=GameBit Core
+Comment=Connect to the GameBit P2P Network
+Comment[de]=Verbinde mit dem GameBit peer-to-peer Netzwerk
+Comment[fr]=GameBit, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=GameBit, eşten eşe kriptografik sanal para birimi
+Exec=GameBit-qt %u
+Terminal=false
+Type=Application
+Icon=GameBit128
+MimeType=x-scheme-handler/GameBit;
+Categories=Office;Finance;

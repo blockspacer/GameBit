@@ -1,0 +1,5 @@
+Building GameBit
+
+See doc/build-*.md for instructions on building GameBitd,
+the intended-for-services, no-graphical-interface, reference
+implementation of GameBit.

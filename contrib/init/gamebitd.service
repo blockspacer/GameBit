@@ -1,0 +1,22 @@
+[Unit]
+Description=GameBit's distributed currency daemon
+After=network.target
+
+[Service]
+User=GameBit
+Group=GameBit
+
+Type=forking
+PIDFile=/var/lib/GameBitd/GameBitd.pid
+ExecStart=/usr/bin/GameBitd -daemon -pid=/var/lib/GameBitd/GameBitd.pid \
+-conf=/etc/GameBit/GameBit.conf -datadir=/var/lib/GameBitd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

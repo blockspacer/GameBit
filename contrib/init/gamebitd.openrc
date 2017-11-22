@@ -1,0 +1,92 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/GameBit/.GameBit" ]; then
+	GameBitD_DEFAULT_DATADIR="/var/lib/GameBit/.GameBit"
+else
+	GameBitD_DEFAULT_DATADIR="/var/lib/GameBitd"
+fi
+
+GameBitD_CONFIGFILE=${GameBitD_CONFIGFILE:-/etc/GameBit/GameBit.conf}
+GameBitD_PIDDIR=${GameBitD_PIDDIR:-/var/run/GameBitd}
+GameBitD_PIDFILE=${GameBitD_PIDFILE:-${GameBitD_PIDDIR}/GameBitd.pid}
+GameBitD_DATADIR=${GameBitD_DATADIR:-${GameBitD_DEFAULT_DATADIR}}
+GameBitD_USER=${GameBitD_USER:-${GameBit_USER:-GameBit}}
+GameBitD_GROUP=${GameBitD_GROUP:-GameBit}
+GameBitD_BIN=${GameBitD_BIN:-/usr/bin/GameBitd}
+GameBitD_NICE=${GameBitD_NICE:-${NICELEVEL:-0}}
+GameBitD_OPTS="${GameBitD_OPTS:-${GameBit_OPTS}}"
+
+name="GameBit Core Daemon"
+description="GameBit cryptocurrency P2P network daemon"
+
+command="/usr/bin/GameBitd"
+command_args="-pid=\"${GameBitD_PIDFILE}\" \
+		-conf=\"${GameBitD_CONFIGFILE}\" \
+		-datadir=\"${GameBitD_DATADIR}\" \
+		-daemon \
+		${GameBitD_OPTS}"
+
+required_files="${GameBitD_CONFIGFILE}"
+start_stop_daemon_args="-u ${GameBitD_USER} \
+			-N ${GameBitD_NICE} -w 2000"
+pidfile="${GameBitD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${GameBitD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${GameBitD_USER}:${GameBitD_GROUP}" \
+	"${GameBitD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${GameBitD_USER}:${GameBitD_GROUP}" \
+	"${GameBitD_PIDDIR}"
+
+	checkpath -f \
+	-o ${GameBitD_USER}:${GameBitD_GROUP} \
+	-m 0660 \
+	${GameBitD_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${GameBitD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run GameBitd."
+		eerror "The setting must appear in ${GameBitD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following"
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is also recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"GameBit Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}
