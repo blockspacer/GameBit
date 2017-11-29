@@ -3,7 +3,7 @@ GameBit Core integration/staging tree
 
 [![Build Status](https://travis-ci.org/GameBit/GameBit.svg?branch=master)](https://travis-ci.org/GameBit/GameBit)
 
-https://GameBitcore.org
+https://GameBitcore.com
 
 What is GameBit?
 ----------------
