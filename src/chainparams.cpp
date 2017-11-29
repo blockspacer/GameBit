@@ -125,7 +125,7 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0x990329dff93dc92bae637051ce71bc4538bc1ce9a2b4deef7dd016bd11df155c"));
 
         vFixedSeeds.clear();
-        vSeeds.clear();
+        vSeeds.push_back(CDNSSeedData("85.10.208.156"));
 
         // GameBit/BITCOIN key prefixes
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,0);
